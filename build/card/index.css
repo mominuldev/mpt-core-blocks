@@ -17,6 +17,7 @@
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: 10px;
+  max-width: 300px;
 }
 .wp-block-mpt-block-mpt-team h3.mpt-team-name {
   font-size: 24px;
@@ -27,6 +28,12 @@
   font-size: 16px;
   display: block;
   color: #444;
+}
+.wp-block-mpt-block-mpt-team.mpt-team-align-center {
+  text-align: center;
+}
+.wp-block-mpt-block-mpt-team.mpt-team-align-right {
+  text-align: right;
 }
 
 /*# sourceMappingURL=index.css.map*/

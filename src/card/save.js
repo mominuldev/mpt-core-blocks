@@ -15,27 +15,35 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save( { attributes, className } ) {
+export default function save( { attributes } ) {
 	const blockProps = useBlockProps.save();
+
+	const { images, name, designation, nameFontSize, nameColor, desiColor } = attributes;
+
+	const hasImages = images !== undefined;
 
 	return (
 		<figure { ...blockProps }>
 
-			<div class="mpt-team-image">
-				<img src={attributes.images.url} alt={attributes.images.alt} />
-			</div>
+			{hasImages && (
+				<div className="mpt-team-image">
+					<img src={images.url} alt={images.alt}/>
+				</div>
+			)}
 
 			<div { ...blockProps }>
 				<RichText.Content
 					tagName="h3"
-					value={ attributes.name }
+					value={ name }
 					className="mpt-team-name"
+					style={{color: nameColor, fontSize: nameFontSize}}
 				/>
 
 				<RichText.Content
 					tagName="span"
-					value={ attributes.designation }
+					value={ designation }
 					className="mpt-team-designation"
+					style={{ color: desiColor }}
 				/>
 			</div>
 		</figure>

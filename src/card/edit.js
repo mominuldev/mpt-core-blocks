@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * Retrieves the translation of text.
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
@@ -11,6 +16,7 @@ import {__} from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
+import {useState} from 'react';
 import {
 	useBlockProps,
 	RichText,
@@ -22,11 +28,20 @@ import {
 	AlignmentControl
 } from '@wordpress/block-editor';
 
-import {useState} from 'react';
+
 import {Fragment} from '@wordpress/element'
 
 // Components
-import {TextControl, ColorPalette, PanelBody, Card, CardBody, Button} from '@wordpress/components';
+import {
+	TextControl,
+	ColorPalette,
+	PanelBody,
+	PanelRow,
+	PanelHeader,
+	FontSizePicker,
+	Placeholder,
+	Button
+} from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -44,46 +59,115 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({attributes, className, setAttributes}) {
 
-	const blockProps = useBlockProps;
 
-	const [color, setColor] = useState('#f00')
-	const colors = [
-		{name: 'red', color: '#f00'},
-		{name: 'white', color: '#fff'},
-		{name: 'blue', color: '#00f'},
+
+export default function Edit({attributes, setAttributes}) {
+
+	const blockProps = useBlockProps();
+
+	const {images, name, designation, alignment, nameFontSize, nameColor, desiColor, align} = attributes;
+
+	const fontSizes = [
+		{
+			name: __('Small'),
+			slug: 'small',
+			size: 16,
+		},
+		{
+			name: __('Normal'),
+			slug: 'normal',
+			size: 20,
+		},
+		{
+			name: __('Big'),
+			slug: 'big',
+			size: 26,
+		},
+		{
+			name: __('Huge'),
+			slug: 'huge',
+			size: 32,
+		},
 	];
 
-	const hasImages = attributes.images !== undefined;
+	const fallbackFontSize = 24;
 
-	// const onChangeContent = ( newContent ) => {
-	// 	setAttributes( { content: newContent } )
-	// }
-	const onChangeAlign = ( newAlign ) => {
-		setAttributes( {
-			align: newAlign === undefined ? 'none' : newAlign,
-		} )
+	// const [TitleColor, setTitleColor] = useState('#000');
+	// // const [DesiColor, setDesiColor] = useState('#000');
+	const [fontSize, setFontSize] = useState(20);
+
+	const Colors = [
+		{name: 'black', color: '#000'},
+		{name: 'white', color: '#fff'},
+		{name: 'blue', color: '#00f'},
+		{name: 'red', color: '#f00'},
+	];
+
+	const hasImages = images !== undefined;
+
+	const textAlignment = (textAlign) => {
+		setAttributes({alignment: textAlign});
 	}
 
+	console.log(alignment);
+
 	return (
-		<div {...blockProps }>
+		<div {...useBlockProps({
+			className: `mpt-team-align-${alignment}`
+		})}>
+
+
+			<InspectorControls>
+				<PanelBody title={__('Name Style')} initialOpen={false}>
+
+					<ColorPalette
+						colors={Colors}
+						value={nameColor}
+						onChange={(newColor) => setAttributes( { nameColor: newColor } )}
+					/>
+
+					<FontSizePicker
+						__nextHasNoMarginBottom
+						fontSizes={fontSizes}
+						value={nameFontSize}
+						fallbackFontSize={fallbackFontSize}
+						onChange={(newFontSize) => {
+							setAttributes({nameFontSize: newFontSize});
+						}}
+					/>
+				</PanelBody>
+
+				<PanelBody title={__('Designation Style')} initialOpen={false}>
+					<ColorPalette
+						colors={Colors}
+						value={desiColor}
+						onChange={(newColor) => setAttributes( { desiColor: newColor } )}
+					/>
+				</PanelBody>
+			</InspectorControls>
+
 			{hasImages && (
 				<MediaUpload
 					allowedTypes={['image']}
 					multiple={false}
-					value={attributes.images ? attributes.images.id : ''}
+					value={images ? images.id : ''}
 					onSelect={(newImages) => setAttributes({images: newImages})}
 					render={({open}) => (
 						<div className="mpt-team-image">
-							{attributes.images.url && (
+							{images.url && (
 								<figure>
-									<img src={attributes.images.url} alt={attributes.images.alt}/>
+									<img src={images.url} alt={images.alt}/>
 								</figure>
 							)}
 							<div>
-								<Button onClick={() => setAttributes({images: ''})} className="button">Remove</Button>
-								<Button onClick={open} className="button">Replace</Button>
+								<button onClick={() => setAttributes({images: ''})} className="button">Remove</button>
+								{images.url && (
+									<button onClick={open} className="button">Replace</button>
+								)}
+								{!images.url && (
+									<button onClick={open} className="button">Upload</button>
+								)}
 							</div>
 						</div>
 					)}
@@ -101,30 +185,35 @@ export default function Edit({attributes, className, setAttributes}) {
 			)}
 
 			<div className="mpt-team-info">
-				<BlockControls>
+
+				<BlockControls title={__('Alignment')}>
 					<AlignmentControl
-						value={ attributes.align }
-						onChange={ onChangeAlign }
+						value={alignment}
+						onChange={textAlignment}
+
 					/>
 				</BlockControls>
+
 				<RichText
 					tagName="h3"
-					value={attributes.name}
+					value={name}
 					allowedFormats={['core/bold', 'core/italic']}
 					onChange={(name) => setAttributes({name: name})}
 					placeholder={__('Name...')}
 					className="mpt-team-name"
-					style={ { textAlign: attributes.align } }
+					style={{color: nameColor, fontSize: fontSize}}
 				/>
 				<RichText
 					tagName="span"
-					value={attributes.designation}
+					value={designation}
 					allowedFormats={['core/bold', 'core/italic']}
 					onChange={(designation) => setAttributes({designation: designation})}
 					placeholder={__('Designation...')}
-					style={ { textAlign: attributes.align } }
+					style={{textAlign: align, color: desiColor}}
 				/>
 			</div>
+
+
 
 		</div>
 	);

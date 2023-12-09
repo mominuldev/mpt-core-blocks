@@ -7,40 +7,26 @@
   "category": "widgets",
   "icon": "smiley",
   "description": "MPT Team Block for Gutenberg",
-  "example": {},
   "keywords": [
     "Momin",
     "team"
   ],
-  "supports": {
-    "html": true,
-    "customClassName": true,
-    "className": false,
-    "alignWide": true,
-    "color": {
-      "text": true,
-      "link": true,
-      "background": true
-    },
-    "typography": true,
-    "padding": {
-      "top": true,
-      "right": true,
-      "bottom": true,
-      "left": true
-    },
-    "margin": true,
-    "spacing": true,
-    "border": true
-  },
-  "textdomain": "mpt-core-block",
-  "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css",
-  "className": "mpt-team",
   "attributes": {
+    "alignment": {
+      "type": "string",
+      "default": "left"
+    },
     "images": {
       "type": "object"
+    },
+    "mediaID": {
+      "type": "number"
+    },
+    "mediaURL": {
+      "type": "string",
+      "source": "attribute",
+      "selector": "img",
+      "attribute": "src"
     },
     "name": {
       "type": "string",
@@ -54,30 +40,10 @@
     },
     "align": {
       "type": "string",
-      "default": "center",
-      "enum": [
-        "left",
-        "center",
-        "right"
-      ],
-      "style": {
-        "elements": {
-          ".mpt-team-container": {
-            "text-align": "{{align}}"
-          }
-        }
-      },
-      "meta": {
-        "placeholder": "Select text alignment"
-      }
-    },
-    "teaxtalign": {
-      "type": "string",
       "default": "none"
     },
     "backgroundColor": {
       "type": "string",
-      "default": "white",
       "style": {
         "elements": {
           ".wp-block-mpt-block-mpt-team": {
@@ -88,17 +54,71 @@
     },
     "nameColor": {
       "type": "string",
-      "default": "black",
+      "default": "#00F",
       "style": {
         "elements": {
           ".mpt-team-name": {
-            "color": "{{nameColor}}"
+            "color": "{{color}}"
           }
         }
-      },
-      "meta": {
-        "placeholder": "Select name color"
+      }
+    },
+    "desiColor": {
+      "type": "string",
+      "default": "#000"
+    },
+    "nameFontSize": {
+      "type": "number",
+      "default": 20
+    },
+    "style": {
+      "type": "string",
+      "margin": "value",
+      "padding": {
+        "top": "value"
       }
     }
-  }
+  },
+  "supports": {
+    "anchor": true,
+    "className": true,
+    "color": {
+      "gradients": true,
+      "link": true,
+      "__experimentalDefaultControls": {
+        "background": true,
+        "text": false
+      }
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true,
+      "__experimentalFontFamily": true,
+      "__experimentalFontStyle": true,
+      "__experimentalFontWeight": true,
+      "__experimentalLetterSpacing": true,
+      "__experimentalTextTransform": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalWritingMode": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true
+      }
+    },
+    "__unstablePasteTextInline": true,
+    "__experimentalSlashInserter": true
+  },
+  "example": {
+    "attributes": {
+      "name": "Mominul Islam",
+      "designation": "WordPress Developer"
+    }
+  },
+  "textdomain": "mpt-core-block",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
 }
