@@ -3,7 +3,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import {__} from '@wordpress/i18n';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -11,13 +11,22 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps, RichText } from '@wordpress/block-editor';
+import {
+	useBlockProps,
+	RichText,
+	InspectorControls,
+	MediaUpload,
+	MediaPlaceholder,
+	BlockIcon,
+	BlockControls,
+	AlignmentControl
+} from '@wordpress/block-editor';
 
-
-
+import {useState} from 'react';
+import {Fragment} from '@wordpress/element'
 
 // Components
-import { TextControl } from '@wordpress/components';
+import {TextControl, ColorPalette, PanelBody, Card, CardBody, Button} from '@wordpress/components';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -35,28 +44,87 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, className }) {
+export default function Edit({attributes, className, setAttributes}) {
+
+	const blockProps = useBlockProps;
+
+	const [color, setColor] = useState('#f00')
+	const colors = [
+		{name: 'red', color: '#f00'},
+		{name: 'white', color: '#fff'},
+		{name: 'blue', color: '#00f'},
+	];
+
+	const hasImages = attributes.images !== undefined;
+
+	// const onChangeContent = ( newContent ) => {
+	// 	setAttributes( { content: newContent } )
+	// }
+	const onChangeAlign = ( newAlign ) => {
+		setAttributes( {
+			align: newAlign === undefined ? 'none' : newAlign,
+		} )
+	}
 
 	return (
-		<div { ...useBlockProps() }>
+		<div {...blockProps }>
+			{hasImages && (
+				<MediaUpload
+					allowedTypes={['image']}
+					multiple={false}
+					value={attributes.images ? attributes.images.id : ''}
+					onSelect={(newImages) => setAttributes({images: newImages})}
+					render={({open}) => (
+						<div className="mpt-team-image">
+							{attributes.images.url && (
+								<figure>
+									<img src={attributes.images.url} alt={attributes.images.alt}/>
+								</figure>
+							)}
+							<div>
+								<Button onClick={() => setAttributes({images: ''})} className="button">Remove</Button>
+								<Button onClick={open} className="button">Replace</Button>
+							</div>
+						</div>
+					)}
+				/>
+			)}
+			{!hasImages && (
+				<MediaPlaceholder
+					icon={<BlockIcon icon="format-gallery"/>}
+					labels={{
+						title: "Placeholder Title",
+						instructions: "Add a most excellent image.",
+					}}
+					onSelect={(newImages) => setAttributes({images: newImages})}
+				/>
+			)}
 
-			<RichText
-				tagName="h3"
-				value={ attributes.title }
-				allowedFormats={ [ 'core/bold', 'core/italic' ] }
-				onChange={ ( title ) => setAttributes( { content: title } ) }
-				placeholder={ __( 'Heading...' ) }
-			/>
-			<RichText
-				tagName="p"
-				value={ attributes.content }
-				allowedFormats={ [ 'core/bold', 'core/italic' ] }
-				onChange={ ( content ) => setAttributes( { content: content } ) }
-				placeholder={ __( 'Content...' ) }
-			/>
-
-			// Panel
-
+			<div className="mpt-team-info">
+				<BlockControls>
+					<AlignmentControl
+						value={ attributes.align }
+						onChange={ onChangeAlign }
+					/>
+				</BlockControls>
+				<RichText
+					tagName="h3"
+					value={attributes.name}
+					allowedFormats={['core/bold', 'core/italic']}
+					onChange={(name) => setAttributes({name: name})}
+					placeholder={__('Name...')}
+					className="mpt-team-name"
+					style={ { textAlign: attributes.align } }
+				/>
+				<RichText
+					tagName="span"
+					value={attributes.designation}
+					allowedFormats={['core/bold', 'core/italic']}
+					onChange={(designation) => setAttributes({designation: designation})}
+					placeholder={__('Designation...')}
+					style={ { textAlign: attributes.align } }
+				/>
+			</div>
 
 		</div>
 	);

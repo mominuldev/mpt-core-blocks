@@ -1,43 +1,104 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "mpt-block/mpt-card",
+  "name": "mpt-block/mpt-team",
   "version": "0.1.0",
-  "title": "MPT Cart",
+  "title": "MPT Team",
   "category": "widgets",
   "icon": "smiley",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "MPT Team Block for Gutenberg",
   "example": {},
   "keywords": [
     "Momin",
-    "card"
+    "team"
   ],
   "supports": {
-    "html": true
+    "html": true,
+    "customClassName": true,
+    "className": false,
+    "alignWide": true,
+    "color": {
+      "text": true,
+      "link": true,
+      "background": true
+    },
+    "typography": true,
+    "padding": {
+      "top": true,
+      "right": true,
+      "bottom": true,
+      "left": true
+    },
+    "margin": true,
+    "spacing": true,
+    "border": true
   },
   "textdomain": "mpt-core-block",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
+  "className": "mpt-team",
   "attributes": {
-    "title": {
-      "type": "string",
-      "source": "html",
-      "selector": "h2"
+    "images": {
+      "type": "object"
     },
-    "content": {
+    "name": {
       "type": "string",
       "source": "html",
-      "selector": "p"
+      "selector": "h3"
+    },
+    "designation": {
+      "type": "string",
+      "source": "html",
+      "selector": "span"
     },
     "align": {
-      "type": "string"
+      "type": "string",
+      "default": "center",
+      "enum": [
+        "left",
+        "center",
+        "right"
+      ],
+      "style": {
+        "elements": {
+          ".mpt-team-container": {
+            "text-align": "{{align}}"
+          }
+        }
+      },
+      "meta": {
+        "placeholder": "Select text alignment"
+      }
+    },
+    "teaxtalign": {
+      "type": "string",
+      "default": "none"
     },
     "backgroundColor": {
-      "type": "string"
+      "type": "string",
+      "default": "white",
+      "style": {
+        "elements": {
+          ".wp-block-mpt-block-mpt-team": {
+            "background-color": "{{backgroundColor}}"
+          }
+        }
+      }
     },
-    "textColor": {
-      "type": "string"
+    "nameColor": {
+      "type": "string",
+      "default": "black",
+      "style": {
+        "elements": {
+          ".mpt-team-name": {
+            "color": "{{nameColor}}"
+          }
+        }
+      },
+      "meta": {
+        "placeholder": "Select name color"
+      }
     }
   }
 }

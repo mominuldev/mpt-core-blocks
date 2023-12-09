@@ -18,9 +18,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/card/editor.scss");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/card/editor.scss");
 
 /**
  * Retrieves the translation of text.
@@ -35,6 +37,8 @@ __webpack_require__.r(__webpack_exports__);
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
+
+
 
 
 // Components
@@ -58,28 +62,96 @@ __webpack_require__.r(__webpack_exports__);
  */
 function Edit({
   attributes,
-  setAttributes,
-  className
+  className,
+  setAttributes
 }) {
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps;
+  const [color, setColor] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('#f00');
+  const colors = [{
+    name: 'red',
+    color: '#f00'
+  }, {
+    name: 'white',
+    color: '#fff'
+  }, {
+    name: 'blue',
+    color: '#00f'
+  }];
+  const hasImages = attributes.images !== undefined;
+
+  // const onChangeContent = ( newContent ) => {
+  // 	setAttributes( { content: newContent } )
+  // }
+  const onChangeAlign = newAlign => {
+    setAttributes({
+      align: newAlign === undefined ? 'none' : newAlign
+    });
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
+    ...blockProps
+  }, hasImages && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUpload, {
+    allowedTypes: ['image'],
+    multiple: false,
+    value: attributes.images ? attributes.images.id : '',
+    onSelect: newImages => setAttributes({
+      images: newImages
+    }),
+    render: ({
+      open
+    }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "mpt-team-image"
+    }, attributes.images.url && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("figure", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: attributes.images.url,
+      alt: attributes.images.alt
+    })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      onClick: () => setAttributes({
+        images: ''
+      }),
+      className: "button"
+    }, "Remove"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.Button, {
+      onClick: open,
+      className: "button"
+    }, "Replace")))
+  }), !hasImages && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaPlaceholder, {
+    icon: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockIcon, {
+      icon: "format-gallery"
+    }),
+    labels: {
+      title: "Placeholder Title",
+      instructions: "Add a most excellent image."
+    },
+    onSelect: newImages => setAttributes({
+      images: newImages
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mpt-team-info"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.BlockControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.AlignmentControl, {
+    value: attributes.align,
+    onChange: onChangeAlign
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
     tagName: "h3",
-    value: attributes.title,
+    value: attributes.name,
     allowedFormats: ['core/bold', 'core/italic'],
-    onChange: title => setAttributes({
-      content: title
+    onChange: name => setAttributes({
+      name: name
     }),
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Heading...')
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Name...'),
+    className: "mpt-team-name",
+    style: {
+      textAlign: attributes.align
+    }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.RichText, {
-    tagName: "p",
-    value: attributes.content,
+    tagName: "span",
+    value: attributes.designation,
     allowedFormats: ['core/bold', 'core/italic'],
-    onChange: content => setAttributes({
-      content: content
+    onChange: designation => setAttributes({
+      designation: designation
     }),
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Content...')
-  }), "// Panel");
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Designation...'),
+    style: {
+      textAlign: attributes.align
+    }
+  })));
 }
 
 /***/ }),
@@ -171,11 +243,28 @@ __webpack_require__.r(__webpack_exports__);
  * @return {Element} Element to render.
  */
 function save({
-  attributes
+  attributes,
+  className
 }) {
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, attributes.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, attributes.content));
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save();
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("figure", {
+    ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "mpt-team-image"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: attributes.images.url,
+    alt: attributes.images.alt
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText.Content, {
+    tagName: "h3",
+    value: attributes.name,
+    className: "mpt-team-name"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.RichText.Content, {
+    tagName: "span",
+    value: attributes.designation,
+    className: "mpt-team-designation"
+  })));
 }
 
 /***/ }),
@@ -244,6 +333,16 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
 /***/ "@wordpress/i18n":
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
@@ -260,7 +359,7 @@ module.exports = window["wp"]["i18n"];
   \*****************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"mpt-block/mpt-card","version":"0.1.0","title":"MPT Cart","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"keywords":["Momin","card"],"supports":{"html":true},"textdomain":"mpt-core-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","attributes":{"title":{"type":"string","source":"html","selector":"h2"},"content":{"type":"string","source":"html","selector":"p"},"align":{"type":"string"},"backgroundColor":{"type":"string"},"textColor":{"type":"string"}}}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"mpt-block/mpt-team","version":"0.1.0","title":"MPT Team","category":"widgets","icon":"smiley","description":"MPT Team Block for Gutenberg","example":{},"keywords":["Momin","team"],"supports":{"html":true,"customClassName":true,"className":false,"alignWide":true,"color":{"text":true,"link":true,"background":true},"typography":true,"padding":{"top":true,"right":true,"bottom":true,"left":true},"margin":true,"spacing":true,"border":true},"textdomain":"mpt-core-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","className":"mpt-team","attributes":{"images":{"type":"object"},"name":{"type":"string","source":"html","selector":"h3"},"designation":{"type":"string","source":"html","selector":"span"},"align":{"type":"string","default":"center","enum":["left","center","right"],"style":{"elements":{".mpt-team-container":{"text-align":"{{align}}"}}},"meta":{"placeholder":"Select text alignment"}},"teaxtalign":{"type":"string","default":"none"},"backgroundColor":{"type":"string","default":"white","style":{"elements":{".wp-block-mpt-block-mpt-team":{"background-color":"{{backgroundColor}}"}}}},"nameColor":{"type":"string","default":"black","style":{"elements":{".mpt-team-name":{"color":"{{nameColor}}"}}},"meta":{"placeholder":"Select name color"}}}}');
 
 /***/ })
 

@@ -7,10 +7,29 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-create-block-todo-list {
-  background-color: #21759b;
+.editor-styles-wrapper .wp-block-mpt-block-mpt-team {
+  background: rgba(255, 255, 255, 0.1);
+  width: -moz-max-content;
+  width: max-content;
+  padding: 11px;
+  border-radius: 8px;
+}
+.editor-styles-wrapper .wp-block-mpt-block-mpt-team .mpt-team-info {
+  padding: 20px;
+}
+.editor-styles-wrapper .wp-block-mpt-block-mpt-team .mpt-team-image {
+  border-radius: 6px;
+  overflow: hidden;
+}
+.editor-styles-wrapper .wp-block-mpt-block-mpt-team h3.mpt-team-name {
+  font-size: 24px;
+  color: #000;
+  margin: 0;
+}
+.editor-styles-wrapper .wp-block-mpt-block-mpt-team span.mpt-team-designation {
+  font-size: 16px;
+  display: block;
   color: #fff;
-  padding: 2px;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

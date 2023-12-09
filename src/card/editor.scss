@@ -4,6 +4,29 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-create-block-todo-list {
-	border: 1px dotted #f00;
+
+.wp-block-mpt-block-mpt-team {
+	background: rgba(255, 255, 255, 0.5);
+	width: max-content;
+	padding: 11px;
+	border-radius: 8px;
+
+
+	.mpt-team-image {
+		border-radius: 6px;
+		overflow: hidden;
+		margin-bottom: 10px;
+	}
+
+	h3.mpt-team-name {
+		font-size: 24px;
+		color: #000;
+		margin: 0;
+	}
+
+	span.mpt-team-designation {
+		font-size: 16px;
+		display: block;
+		color: #444;
+	}
 }
